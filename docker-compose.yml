@@ -1,0 +1,15 @@
+version: '3'
+
+volumes:
+  composer_cache:
+
+services:
+  app:
+    build:
+      context: docker/
+      dockerfile: Dockerfile.dev
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html/
+      - composer_cache:/home/taskr/.composer/cache/:delegated

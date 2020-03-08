@@ -1,0 +1,58 @@
+{
+    "compilerOptions": {
+        /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+        "target": "es5",
+        /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+        "module": "ESNext",
+        // this enables stricter inference for data properties on `this`
+        "strict": true,
+        /* Specify library files to be included in the compilation. */
+        "lib": [
+            "dom",
+            "es5",
+            "es2015.promise"
+        ],
+        /* Generates corresponding '.map' file. */
+        "sourceMap": true,
+        "noEmitHelpers": true,
+        /* Import emit helpers from 'tslib'. */
+        "importHelpers": true,
+        /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+        "moduleResolution": "node",
+        /* Base directory to resolve non-absolute module names. */
+        "baseUrl": ".",
+        /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+        "paths": {
+            "@/*": [
+                "resources/assets/js/*"
+            ]
+        },
+        /* List of folders to include type definitions from. */
+        "typeRoots": [
+            "./node_modules/vuetify/types",
+            "./node_modules/@types"
+        ],
+        /* Type declaration files to be included in compilation. */
+        "types": [
+            "node",
+            "vuetify"
+        ],
+        /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
+        "allowSyntheticDefaultImports": true,
+        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+        "esModuleInterop": true,
+        /* Enables experimental support for ES7 decorators. */
+        "experimentalDecorators": true,
+        /* Enables experimental support for emitting type metadata for decorators. */
+        "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "resources/assets/js"
+    ],
+    "exclude": [
+        "node_modules",
+        "vendor"
+    ]
+}

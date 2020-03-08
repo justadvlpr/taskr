@@ -1,0 +1,67 @@
+FROM php:7.4.3-apache-buster
+
+ENV APACHE_RUN_USER taskr
+ENV APACHE_RUN_GROUP taskr
+
+WORKDIR /tmp
+
+RUN a2enmod rewrite && \
+    # create non-root user
+    groupadd --gid 1000 taskr && \
+    useradd --uid 1000 --gid taskr --shell /bin/bash --create-home taskr && \
+    # install packages
+    apt-get update && \
+    apt-get -y install \
+            curl \
+            wget \
+            zip \
+            unzip \
+            nano \
+            git \
+            libzip-dev \
+            default-mysql-client \
+            libicu-dev \
+            libxml2-dev \
+        --no-install-recommends
+
+RUN docker-php-ext-configure bcmath && \
+    docker-php-ext-configure zip && \
+    docker-php-ext-install \
+        zip \
+        bcmath \
+        exif \
+        intl \
+        pdo_mysql \
+        mysqli \
+        pcntl \
+        soap
+
+RUN echo "ServerSignature Off" | tee -a /etc/apache2/apache2.conf
+RUN echo "ServerTokens Prod" | tee -a /etc/apache2/apache2.conf
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
+# clear cache
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN mkdir /home/taskr/log
+RUN mkdir /home/taskr/database
+RUN chown -R taskr:taskr /var/www/html
+RUN chown -R taskr:taskr /home/taskr
+
+# COPY & ADD command is used for ".github/workflows/build.yml"
+# the path needs to be set like this
+ADD ./docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+ADD ./docker/prod/docker-php-ext-app.ini /usr/local/etc/php/conf.d/docker-php-ext-app.ini
+ADD ./docker/prod/entrypoint.sh /entrypoint.sh
+ADD ./docker/prod/crontab /var/spool/cron/crontabs/taskr
+
+# this will copy all the content he cloned into the "/var/www/html/" folder
+COPY --chown=taskr . /var/www/html/
+# delete the entire .docker folder
+RUN rm -rf /var/www/html/docker
+
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /var/www/html/
+
+CMD ["/entrypoint.sh"]

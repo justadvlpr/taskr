@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: composer install
+        run: |
+          composer install --ignore-platform-reqs --no-suggest --optimize-autoloader --no-dev --no-progress --prefer-dist
+
+      - name: Set ENVs
+        run: |
+          sed -i -e '/APP_VERSION=/s/=.*/='$(echo ${{ github.ref }} | grep -oP '(?<=refs\/tags\/).*')'/' .env
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+
+      - run: npm install
+
+      - run: npm run production
+
+      - name: Cleaning unnecessary files
+        run: |
+          rm -rf node_modules/ .git/ .github/ resources/assets/
+
+      - name: Build and push to DockerHub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker build -t vitorarantes/taskr -f ./docker/Dockerfile.prod .
+          docker push vitorarantes/taskr
+          docker logout

@@ -30,6 +30,15 @@
                     >
                         <v-icon>mdi-delete</v-icon>
                     </v-btn>
+
+                    <v-btn
+                        @click="completed(item)"
+                        icon
+                        text
+                        v-if="item.completed === 0 && $router.currentRoute.name === 'tasks.today'"
+                    >
+                        <v-icon>mdi-check-circle</v-icon>
+                    </v-btn>
                 </template>
 
                 <template v-slot:item.completed="{ item }">
@@ -112,6 +121,21 @@
                 .then((response: any) => {
                     if (response && response.data && response.status === 200) {
                         this.items = response.data.tasks;
+                    }
+                })
+                .finally(() => this.isLoading = false);
+        }
+
+        completed(item: any) {
+            this.isLoading = true;
+
+            axios
+                .put(`task/${item.id}`, {
+                    completed: 1,
+                })
+                .then((response: any) => {
+                    if (response && response.data && response.status === 200) {
+                        item.completed = 1;
                     }
                 })
                 .finally(() => this.isLoading = false);

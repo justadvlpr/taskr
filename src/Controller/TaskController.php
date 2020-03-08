@@ -118,14 +118,23 @@ class TaskController extends Controller
         try {
             $task = $this->findTask($request, $orm);
 
-            foreach (['task', 'date'] as $name) {
-                if (empty($body[$name])) {
-                    throw new \InvalidArgumentException("{$name} is required.");
+            foreach ($body as $attributeKey => $attributeValue) {
+                if (empty($body[$attributeKey])) {
+                    throw new \InvalidArgumentException("{$attributeKey} is required.");
                 }
             }
 
-            $task->setDate($body['date']);
-            $task->setTask($body['task']);
+            if (isset($body['date'])) {
+                $task->setDate($body['date']);
+            }
+
+            if (isset($body['task'])) {
+                $task->setTask($body['task']);
+            }
+
+            if (isset($body['completed'])) {
+                $task->setCompleted($body['completed']);
+            }
 
             $transaction = new Transaction($orm);
             $transaction->persist($task);

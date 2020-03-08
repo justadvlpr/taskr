@@ -13,6 +13,7 @@ use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Transaction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Yiisoft\Data\Paginator\OffsetPaginator;
 use Yiisoft\Factory\Exceptions\NotFoundException;
 
 class TaskController extends Controller
@@ -39,9 +40,16 @@ class TaskController extends Controller
             $userTasks = $taskRepository->getAll($user->getId());
         }
 
+        $currentPage = (int)$request->getQueryParams()['page'];
+        $pageSize = (int)$request->getQueryParams()['per-page'];
+
+        $paginator = (new OffsetPaginator($userTasks))
+            ->withPageSize($pageSize)
+            ->withCurrentPage($currentPage);
+
         $tasks = [];
 
-        foreach ($userTasks as $task) {
+        foreach ($paginator->read() as $task) {
             /** @var Task $task */
             $tasks[] = [
                 'id' => $task->getPk(),
@@ -54,7 +62,13 @@ class TaskController extends Controller
         return $this->renderJson(
             [
                 'success' => true,
-                'tasks' => $tasks
+                'tasks' => $tasks,
+                '_pagination' => [
+                    'items-per-page' => $pageSize,
+                    'total-items' => $paginator->getTotalItems(),
+                    'total-page-count' => $paginator->getTotalPages(),
+                    'current-page' => $paginator->getCurrentPage()
+                ]
             ],
             200
         );

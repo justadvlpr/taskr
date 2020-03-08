@@ -7,12 +7,15 @@
             </v-card-title>
 
             <v-data-table
+                :footer-props="footerProps"
                 :headers="headers"
-                :hide-default-footer="true"
-                :loading="isLoading"
+                :hide-default-footer="false"
                 :items="items"
-                :items-per-page="-1"
-                sort-by="id"
+                :items-per-page="itemsPerPage"
+                :loading="isLoading"
+                :options.sync="options"
+                :page="currentPage"
+                :server-items-length="totalItems"
             >
                 <template v-slot:item.action="{ item }">
                     <v-btn
@@ -103,24 +106,48 @@
 
         public items: Array<any> = [];
 
-        mounted(): void {
-            this.init();
-        }
+        // pagination
+        public currentPage: number = 1;
+        public totalItems: number = 0;
+        public itemsPerPage: number = 5;
+        public pageCount: number = 0;
 
-        init() {
+        // v-table
+        public options: object = {};
+        public footerProps: object = {
+            showFirstLastPage: true,
+            'items-per-page-options': [5, 10, 20, 30]
+        };
+
+        @Watch('options', {deep: true})
+        watchableTable() {
             this.isLoading = true;
 
             window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
 
+            const {page, itemsPerPage}: any = this.options;
+
             axios
                 .get('task', {
                     params: {
-                        filter: this.$router.currentRoute.name === 'tasks.all' ? 'all' : 'today'
+                        filter: this.$router.currentRoute.name === 'tasks.all' ? 'all' : 'today',
+                        'page': page,
+                        'per-page': itemsPerPage,
                     }
                 })
                 .then((response: any) => {
                     if (response && response.data && response.status === 200) {
                         this.items = response.data.tasks;
+
+                        this.itemsPerPage = parseInt(response.data._pagination['items-per-page']);
+                        this.totalItems = parseInt(response.data._pagination['total-items']);
+                        this.pageCount = parseInt(response.data._pagination['total-page-count']);
+                        this.currentPage = parseInt(response.data._pagination['current-page']);
+
+                        console.log(this.itemsPerPage);
+                        console.log(this.totalItems);
+                        console.log(this.pageCount);
+                        console.log(this.currentPage);
                     }
                 })
                 .finally(() => this.isLoading = false);

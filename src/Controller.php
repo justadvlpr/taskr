@@ -5,7 +5,6 @@ namespace App;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\Auth\Method\HttpBearer;
 use Yiisoft\View\ViewContextInterface;
 use Yiisoft\View\WebView;
 use Yiisoft\Yii\Web\User\User;

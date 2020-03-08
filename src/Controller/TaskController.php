@@ -174,7 +174,7 @@ class TaskController extends Controller
             $orm->queueDelete($task)->execute();
 
             return $this->renderJson([], 204);
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             return $this->renderJson(
                 [
                     'success' => false,

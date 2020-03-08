@@ -5,7 +5,6 @@ namespace App\Factory;
 use App\Controller\AuthController;
 use App\Controller\SiteController;
 use App\Controller\TaskController;
-use App\Middleware\JsonResponseMiddleware;
 use Psr\Container\ContainerInterface;
 use Yiisoft\Auth\Middleware\Auth;
 use Yiisoft\Router\FastRoute\UrlMatcher;

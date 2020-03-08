@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Auth\IdentityRepositoryInterface;
-use Yiisoft\Router\UrlGeneratorInterface;
 use Yiisoft\View\WebView;
 use Yiisoft\Yii\Web\User\User;
 
@@ -85,7 +84,7 @@ class AuthController extends Controller
 
     public function verify(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var $authUser \App\Entity\User */
+        /** @var \App\Entity\User $authUser */
         $authUser = $request->getAttribute('auth_user');
 
         return $this->renderJson(

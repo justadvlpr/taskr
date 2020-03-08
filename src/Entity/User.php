@@ -4,46 +4,41 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\Task;
-use Cycle\Annotated\Annotation\Column;
-use Cycle\Annotated\Annotation\Entity;
-use Cycle\Annotated\Annotation\Relation\HasMany;
-use Cycle\Annotated\Annotation\Table;
-use Cycle\Annotated\Annotation\Table\Index;
+use Cycle\ORM\Promise\Collection\CollectionPromise;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Yiisoft\Auth\IdentityInterface;
 use Yiisoft\Security\PasswordHasher;
 use Yiisoft\Security\Random;
-use Yiisoft\Auth\IdentityInterface;
 
 /**
- * @Entity(repository="App\Repository\UserRepository", mapper="Yiisoft\Yii\Cycle\Mapper\TimestampedMapper")
- * @Table(
+ * @Cycle\Annotated\Annotation\Entity(repository="App\Repository\UserRepository", mapper="Yiisoft\Yii\Cycle\Mapper\TimestampedMapper")
+ * @Cycle\Annotated\Annotation\Table(
  *     indexes={
- *         @Index(columns={"login"}, unique=true),
- *         @Index(columns={"token"}, unique=true)
+ *         @Cycle\Annotated\Annotation\Table\Index(columns={"login"}, unique=true),
+ *         @Cycle\Annotated\Annotation\Table\Index(columns={"token"}, unique=true)
  *     }
  * )
  */
 class User implements IdentityInterface
 {
     /**
-     * @Column(type="primary")
+     * @Cycle\Annotated\Annotation\Column(type="primary")
      */
     private ?int $id = null;
 
     /**
-     * @Column(type="string(128)")
+     * @Cycle\Annotated\Annotation\Column(type="string(128)")
      */
     private string $token;
 
     /**
-     * @Column(type="string(48)")
+     * @Cycle\Annotated\Annotation\Column(type="string(48)")
      */
     private string $login;
 
     /**
-     * @Column(type="string")
+     * @Cycle\Annotated\Annotation\Column(type="string")
      */
     private string $passwordHash;
 
@@ -58,8 +53,8 @@ class User implements IdentityInterface
     private DateTimeImmutable $updated_at;
 
     /**
-     * @HasMany(target="App\Entity\Task", fkAction="CASCADE")
-     * @var Task[]
+     * @Cycle\Annotated\Annotation\Relation\HasMany(target="App\Entity\Task", fkAction="CASCADE")
+     * @var Task[] | CollectionPromise
      */
     private $tasks;
 

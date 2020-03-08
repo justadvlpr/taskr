@@ -4,44 +4,43 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\User;
-use Cycle\Annotated\Annotation\Column;
-use Cycle\Annotated\Annotation\Entity;
-use Cycle\Annotated\Annotation\Relation\BelongsTo;
-use Cycle\Annotated\Annotation\Relation\HasMany;
-use Cycle\Annotated\Annotation\Table;
-use Cycle\Annotated\Annotation\Table\Index;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
 use Yiisoft\Auth\IdentityInterface;
 
 /**
- * @Entity(repository="App\Repository\TaskRepository", mapper="Yiisoft\Yii\Cycle\Mapper\TimestampedMapper")
+ * @Cycle\Annotated\Annotation\Entity(
+ *     repository="App\Repository\TaskRepository",
+ *     mapper="Yiisoft\Yii\Cycle\Mapper\TimestampedMapper"
+ * )
  */
 class Task implements IdentityInterface
 {
     /**
-     * @Column(type="primary")
+     * @Cycle\Annotated\Annotation\Column(type="primary")
      */
     private ?int $id = null;
 
     /**
-     * @Column(type="text")
+     * @Cycle\Annotated\Annotation\Column(type="text")
      */
     private string $task;
 
     /**
-     * @Column(type="date")
+     * @Cycle\Annotated\Annotation\Column(type="date")
      */
     private $date;
 
     /**
-     * @Column(type="integer(1)")
+     * @Cycle\Annotated\Annotation\Column(type="integer(1)")
      */
     private int $completed;
 
     /**
-     * @BelongsTo(target="App\Entity\User", nullable=false, fkAction="CASCADE")
+     * @Cycle\Annotated\Annotation\Relation\BelongsTo(
+     *     target="App\Entity\User",
+     *     nullable=false,
+     *     fkAction="CASCADE"
+     * )
      * @var User|\Cycle\ORM\Promise\Reference
      */
     private $user = null;
@@ -77,7 +76,7 @@ class Task implements IdentityInterface
         return $this->id;
     }
 
-    public function setTask($task)
+    public function setTask($task): void
     {
         $this->task = $task;
     }
@@ -87,7 +86,7 @@ class Task implements IdentityInterface
         return $this->task;
     }
 
-    public function setDate($date)
+    public function setDate($date): void
     {
         $this->date = $date;
     }
@@ -97,7 +96,7 @@ class Task implements IdentityInterface
         return $this->date;
     }
 
-    public function setCompleted($completed)
+    public function setCompleted($completed): void
     {
         $this->completed = $completed;
     }

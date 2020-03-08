@@ -143,11 +143,6 @@
                         this.totalItems = parseInt(response.data._pagination['total-items']);
                         this.pageCount = parseInt(response.data._pagination['total-page-count']);
                         this.currentPage = parseInt(response.data._pagination['current-page']);
-
-                        console.log(this.itemsPerPage);
-                        console.log(this.totalItems);
-                        console.log(this.pageCount);
-                        console.log(this.currentPage);
                     }
                 })
                 .finally(() => this.isLoading = false);

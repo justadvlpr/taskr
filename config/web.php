@@ -60,11 +60,6 @@ return [
         ],
     ],
 
-    // here you can configure custom prefix of the web path
-    // \Yiisoft\Yii\Web\Middleware\SubFolder::class => [
-    //     'prefix' => '',
-    // ],
-
     // Event dispatcher:
     ListenerProviderInterface::class => Provider::class,
     EventDispatcherInterface::class => Dispatcher::class,
@@ -81,14 +76,5 @@ return [
         $identityRepository = $container->get(IdentityRepositoryInterface::class);
         $response = $container->get(ResponseFactoryInterface::class);
         return new Auth($response, new HttpBearer($identityRepository));
-    },
-
-    User::class => static function (ContainerInterface $container) {
-        $session = $container->get(SessionInterface::class);
-        $identityRepository = $container->get(IdentityRepositoryInterface::class);
-        $eventDispatcher = $container->get(EventDispatcherInterface::class);
-        $user = new Yiisoft\Yii\Web\User\User($identityRepository, $eventDispatcher);
-        $user->setSession($session);
-        return $user;
     },
 ];

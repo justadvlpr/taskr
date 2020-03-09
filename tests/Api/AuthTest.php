@@ -7,13 +7,17 @@ use PHPUnit\Framework\TestCase;
 
 class AuthTest extends TestCase
 {
-    public $client;
+    use TestHelper;
+
+    public ?Client $client;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::resetDbAndCreateUser();
+    }
 
     protected function setUp(): void
     {
-        $path = dirname(__DIR__, 2);
-        @unlink("{$path}/runtime/database.db");
-        exec("{$path}/vendor/bin/yii user/create user password");
         $this->client = new Client(['base_uri' => 'http://app/api/']);
     }
 
@@ -52,20 +56,7 @@ class AuthTest extends TestCase
 
     public function testLoginSuccess()
     {
-        $response = $this->client->request(
-            'POST',
-            'auth/login',
-            [
-                'http_errors' => false,
-                'form_params' => [
-                    'login' => 'user',
-                    'password' => 'password',
-                ]
-            ]
-        );
-        $this->assertEquals(200, $response->getStatusCode());
-        $decodedData = json_decode($response->getBody()->getContents(), true);
-        $this->assertIsArray($decodedData);
-        $this->assertArrayHasKey('user', $decodedData);
+        $token = $this->loginAndGetToken();
+        $this->assertIsString($token);
     }
 }

@@ -119,7 +119,15 @@ class TaskController extends Controller
             $transaction->persist($task);
             $transaction->run();
 
-            return $this->renderJson(['success' => true], 200);
+            return $this->renderJson([
+                'success' => true,
+                'task' => [
+                    'id' => $task->getPk(),
+                    'task' => $task->getTask(),
+                    'date' => $task->getDate(),
+                    'completed' => $task->getCompleted(),
+                ]
+            ], 200);
         } catch (\Throwable $e) {
             return $this->renderJson(
                 [
@@ -163,7 +171,15 @@ class TaskController extends Controller
             $transaction->persist($task);
             $transaction->run();
 
-            return $this->renderJson(['success' => true], 200);
+            return $this->renderJson([
+                'success' => true,
+                'task' => [
+                    'id' => $task->getPk(),
+                    'task' => $task->getTask(),
+                    'date' => $task->getDate(),
+                    'completed' => $task->getCompleted(),
+                ]
+            ], 200);
         } catch (\Throwable $e) {
             return $this->renderJson(
                 [

@@ -2,6 +2,10 @@ version: '3'
 
 volumes:
   composer_cache:
+  mariadb:
+
+networks:
+  taskr:
 
 services:
   app:
@@ -10,6 +14,23 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 80:80
+    env_file:
+      - .env
+    networks:
+      - taskr
     volumes:
       - ./:/var/www/html/
       - composer_cache:/home/taskr/.composer/cache/:delegated
+
+  mariadb:
+    image: mariadb:10.4.12
+    environment:
+      - MYSQL_ROOT_PASSWORD=${APP_DB_PASSWORD}
+      - MYSQL_ROOT_USERNAME=${APP_DB_USERNAME}
+      - MYSQL_DATABASE=${APP_DB_DATABASE}
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - taskr

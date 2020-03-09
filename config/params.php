@@ -7,14 +7,14 @@ return [
     'debugger.enabled' => true,
 
     'mailer' => [
-        'host' => 'smtp.example.com',
-        'port' => 25,
-        'encryption' => null,
-        'username' => 'admin@example.com',
-        'password' => '',
+        'host' => getenv('APP_MAIL_HOST'),
+        'port' => getenv('APP_MAIL_PORT'),
+        'encryption' => getenv('APP_MAIL_ENCRYPTION'),
+        'username' => getenv('APP_MAIL_USERNAME'),
+        'password' => getenv('APP_MAIL_PASSWORD'),
     ],
 
-    'supportEmail' => 'support@example.com',
+    'supportEmail' => getenv('APP_MAIL_FROM'),
 
     'aliases' => [
         '@root' => dirname(__DIR__),
@@ -30,7 +30,6 @@ return [
     'console' => [
         'commands' => [
             'user/create' => Command\User\CreateCommand::class,
-            'fixture/add' => Command\Fixture\AddCommand::class,
         ],
     ],
 
@@ -39,7 +38,9 @@ return [
         'default' => 'default',
         'aliases' => [],
         'databases' => [
-            'default' => ['connection' => 'sqlite'],
+            'default' => [
+                'connection' => getenv('APP_DB_ENGINE')
+            ],
         ],
         'connections' => [
             'sqlite' => [
@@ -47,6 +48,14 @@ return [
                 'connection' => 'sqlite:@runtime/database.db',
                 'username' => '',
                 'password' => '',
+            ],
+            'mysql' => [
+                'driver' => \Spiral\Database\Driver\MySQL\MySQLDriver::class,
+                'options' => [
+                    'connection' => 'mysql:host=' . getenv('APP_DB_HOST') . ';dbname=' . getenv('APP_DB_DATABASE') . ';port=' . getenv('APP_DB_PORT') . '',
+                    'username' => getenv('APP_DB_USERNAME'),
+                    'password' => getenv('APP_DB_PASSWORD'),
+                ]
             ],
         ],
     ],

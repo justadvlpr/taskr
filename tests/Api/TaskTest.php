@@ -9,38 +9,30 @@ use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
-    public static Client $client;
+    use TestHelper;
+
+    public ?Client $client;
     public static string $token = '';
 
     public static function setUpBeforeClass(): void
     {
-        $path = dirname(__DIR__, 2);
-        @unlink("{$path}/runtime/database.db");
-        exec("{$path}/vendor/bin/yii user/create user password");
+        self::resetDbAndCreateUser();
+        static::$token = self::loginAndGetToken();
+    }
 
-        static::$client = new Client(['base_uri' => 'http://app/api/']);
+    protected function setUp(): void
+    {
+        $this->client = new Client(['base_uri' => 'http://app/api/']);
+    }
 
-        $response = static::$client->request(
-            'POST',
-            'auth/login',
-            [
-                'http_errors' => false,
-                'form_params' => [
-                    'login' => 'user',
-                    'password' => 'password',
-                ]
-            ]
-        );
-        self::assertEquals(200, $response->getStatusCode());
-        $decodedData = json_decode($response->getBody()->getContents(), true);
-        self::assertIsArray($decodedData);
-        self::assertArrayHasKey('user', $decodedData);
-        static::$token = $decodedData['user']['token'];
+    protected function tearDown(): void
+    {
+        $this->client = null;
     }
 
     public function testCreateTaskRequired()
     {
-        $response = static::$client->request('POST', 'task',
+        $response = $this->client->request('POST', 'task',
             [
                 'http_errors' => false,
                 'form_params' => [
@@ -49,16 +41,15 @@ class TaskTest extends TestCase
                 ],
                 'headers' => [
                     'Authorization' => 'Bearer ' . static::$token,
-                    'Accept' => 'application/json',
                 ]
             ]
         );
         $this->assertEquals(422, $response->getStatusCode());
     }
 
-    public function testCreateTaskSuccess()
+    public function testCreateAndUpdateTaskWithSuccess()
     {
-        $response = static::$client->request('POST', 'task',
+        $response = $this->client->request('POST', 'task',
             [
                 'http_errors' => false,
                 'form_params' => [
@@ -67,24 +58,26 @@ class TaskTest extends TestCase
                 ],
                 'headers' => [
                     'Authorization' => 'Bearer ' . static::$token,
-                    'Accept' => 'application/json',
                 ]
             ]
         );
         $this->assertEquals(200, $response->getStatusCode());
-    }
 
-    public function testUpdateTask()
-    {
-        $response = static::$client->request(
+        $decodedData = json_decode($response->getBody()->getContents(), true);
+        $this->assertIsArray($decodedData);
+
+        $this->assertArrayHasKey('task', $decodedData);
+
+        $taskId = $decodedData['task']['id'];
+
+        $response = $this->client->request(
             'PUT',
-            'task/1',
+            'task/' . $taskId,
             [
                 'body' => json_encode(['task' => 'test 2',]),
                 'http_errors' => false,
                 'headers' => [
                     'Authorization' => 'Bearer ' . static::$token,
-                    'Accept' => 'application/json',
                 ]
             ]
         );

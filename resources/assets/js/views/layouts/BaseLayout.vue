@@ -2,6 +2,8 @@
     <div>
         <AppHeader/>
 
+        <Snackbar/>
+
         <v-content>
             <router-view :key="$route.path"/>
         </v-content>
@@ -12,12 +14,13 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import AppHeader from "@/components/AppHeader.vue";
-    import AppFooter from "@/components/AppFooter.vue";
     import store from "@/store";
+    import Snackbar from "@/components/Snackbar.vue";
 
     @Component({
         name: "BaseLayout",
         components: {
+            Snackbar,
             AppHeader,
         },
         beforeRouteEnter: async function (to, from, next) {

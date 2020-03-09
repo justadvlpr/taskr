@@ -45,6 +45,7 @@
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
+    import {displaySnackbar} from "@/helpers/base-helper";
 
     @Component({
         name: "Register",
@@ -77,10 +78,10 @@
 
             this.$store.dispatch('auth/register', this.formModel)
                 .then(() => {
-                    this.$router.push('/tasks/today');
+                    this.$router.push('/login');
                 })
-                .catch(() => {
-
+                .catch((error) => {
+                    displaySnackbar(error, 'red');
                 })
                 .finally(() => {
                     this.isProcessing = false;

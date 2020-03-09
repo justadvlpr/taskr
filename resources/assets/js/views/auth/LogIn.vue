@@ -45,6 +45,7 @@
 <script lang="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
+    import {displaySnackbar} from "@/helpers/base-helper";
 
     @Component({
         name: "LogIn",
@@ -79,8 +80,8 @@
                 .then(() => {
                     this.$router.push('/tasks/today');
                 })
-                .catch(() => {
-
+                .catch(error => {
+                    displaySnackbar(error, 'red');
                 })
                 .finally(() => {
                     this.isProcessing = false;

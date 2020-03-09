@@ -65,6 +65,7 @@
     import Component from "vue-class-component";
     import axios from "axios";
     import {Watch} from "vue-property-decorator";
+    import {displaySnackbar} from "@/helpers/base-helper";
 
     @Component({
         name: "TaskIndex",
@@ -183,7 +184,7 @@
                         });
                     }
                 })
-                .catch(() => console.log('could not delete task'))
+                .catch(() => displaySnackbar("Error deleting task", 'red'))
                 .finally(() => this.isLoading = false);
         }
 

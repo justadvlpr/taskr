@@ -65,6 +65,7 @@
     import Vue from "vue";
     import {Component} from "vue-property-decorator";
     import axios from "axios";
+    import {displaySnackbar} from "@/helpers/base-helper";
 
     @Component({
         name: "TaskCreate",
@@ -99,9 +100,7 @@
             this.isProcessing = true;
 
             axios
-                .get('task/' + this.$router.currentRoute.params.id, {
-
-                })
+                .get(`task/${this.$router.currentRoute.params.id}`)
                 .then(response => {
                     if (response && response.data && response.status === 200) {
                         this.formModel = response.data;
@@ -137,23 +136,22 @@
                     data: form
                 })
                 .then(response => {
-                    if (response.data && response.status === 200) {
-                        //this.$router.push('/tasks');
+                    if (
+                        response.data &&
+                        response.status === 200
+                    ) {
+                        this.$router.push('/tasks/all');
                     } else {
-                        // log error
+                        displaySnackbar(response.data.error, 'red');
                     }
                 })
                 .catch(error => {
-                    if (error.response.data) {
-                        let errors = "";
-
-                        Object.values(error.response.data.errors).forEach((value: any) => {
-                            Object.values(value).forEach((error: any) => {
-                                errors += "* " + error + "\n";
-                            });
-                        });
-
-                    } else {
+                    if (
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error
+                    ) {
+                        displaySnackbar(error.response.data.error, 'red');
                     }
                 })
                 .finally(() => this.isProcessing = false);

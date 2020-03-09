@@ -6,17 +6,19 @@ Simply manage your daily tasks on a beautiful and intuitive UI.
 
 This is a single page application, technologies used:
 - Vue.js with Vuetify for the frontend.
-- As I am a huge fan of Yii for the backend I used the new Yii3 (no official release yet, but this already shows what you can do with it).
-- For the database, SQLite was used, it is located inside the **runtime** folder.
+- As I am a huge fan of Yii, for the backend I used the new Yii3 (no official release yet, but this already shows what you can do with it).
+- For the database, SQLite was used as default (possible to switch to mysql, check .env file).
 
 ## Development
 
 #### # Setup:
 
-- `git clone https://github.com/justadvlpr/taskr.git`
-- `docker-compose up -d`
-- `docker-compose exec --user taskr app composer install`
-- `docker-compose exec --user taskr app npm run dev`
+```
+$: git clone https://github.com/justadvlpr/taskr.git
+$: docker-compose up -d
+$: docker-compose exec --user taskr app composer install
+$: docker-compose exec --user taskr app npm run dev
+```
 
 #### # Create a user:
 
@@ -28,6 +30,7 @@ This is a single page application, technologies used:
 
 # API
 
+HttpAuthBearer was used for the authentication.
 File **Factory/AppRouterFactory.php** to see which routes implement the auth middleware.
 
 ```

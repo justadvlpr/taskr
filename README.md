@@ -28,6 +28,8 @@ This is a single page application, technologies used:
 
 # API
 
+File **Factory/AppRouterFactory.php** to see which routes implement the auth middleware.
+
 ```
 POST /api/auth/login [ {"login": "", "password": ""} ]
 POST /api/auth/register [ {"login": "", "password": ""} ]

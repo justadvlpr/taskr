@@ -26,8 +26,7 @@ class AuthController extends Controller
         WebView $view,
         User $user,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->logger = $logger;
 
         parent::__construct($responseFactory, $user, $aliases, $view);
@@ -41,8 +40,7 @@ class AuthController extends Controller
     public function register(
         ServerRequestInterface $request,
         ORMInterface $orm
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $body = $request->getParsedBody();
         $error = null;
 
@@ -77,8 +75,7 @@ class AuthController extends Controller
     public function login(
         ServerRequestInterface $request,
         IdentityRepositoryInterface $identityRepository
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $body = $request->getParsedBody();
         $error = null;
 

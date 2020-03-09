@@ -118,6 +118,8 @@ class TaskController extends Controller
             $transaction = new Transaction($orm);
             $transaction->persist($task);
             $transaction->run();
+
+            return $this->renderJson(['success' => true], 200);
         } catch (\Throwable $e) {
             return $this->renderJson(
                 [
@@ -127,8 +129,6 @@ class TaskController extends Controller
                 422
             );
         }
-
-        return $this->renderJson(['success' => true], 200);
     }
 
     public function update(Request $request, ORMInterface $orm): Response

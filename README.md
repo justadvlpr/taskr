@@ -22,14 +22,15 @@ This is a single page application, technologies used:
 
 `docker-compose exec --user taskr app ./vendor/bin/yii user/create user password`
 
-## OR
+#### # Launch tests:
 
-TODO
+`docker-compose exec --user taskr app composer test`
 
 # API
 
 ```
 POST /api/auth/login [ {"login": "", "password": ""} ]
+POST /api/auth/register [ {"login": "", "password": ""} ]
 
 POST /api/auth/verify ( returns the current user data if token is validated )
 

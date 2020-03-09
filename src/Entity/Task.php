@@ -91,6 +91,9 @@ class Task implements IdentityInterface
         $this->date = $date;
     }
 
+    /**
+     * @return DateTimeImmutable|string
+     */
     public function getDate()
     {
         return $this->date;

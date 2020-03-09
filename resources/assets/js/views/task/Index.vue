@@ -19,6 +19,17 @@
             >
                 <template v-slot:item.action="{ item }">
                     <v-btn
+                        @click="completed(item)"
+                        icon
+                        text
+                        color="green"
+                        title="mark as completed"
+                        v-if="item.completed === 0 && $router.currentRoute.name === 'tasks.today'"
+                    >
+                        <v-icon>mdi-check-circle</v-icon>
+                    </v-btn>
+
+                    <v-btn
                         :to="'/tasks/' + item.id + '/edit'"
                         icon
                         text
@@ -32,15 +43,6 @@
                         text
                     >
                         <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                        @click="completed(item)"
-                        icon
-                        text
-                        v-if="item.completed === 0 && $router.currentRoute.name === 'tasks.today'"
-                    >
-                        <v-icon>mdi-check-circle</v-icon>
                     </v-btn>
                 </template>
 
@@ -139,10 +141,12 @@
                     if (response && response.data && response.status === 200) {
                         this.items = response.data.tasks;
 
-                        this.itemsPerPage = parseInt(response.data._pagination['items-per-page']);
-                        this.totalItems = parseInt(response.data._pagination['total-items']);
-                        this.pageCount = parseInt(response.data._pagination['total-page-count']);
-                        this.currentPage = parseInt(response.data._pagination['current-page']);
+                        if (response.data._pagination) {
+                            this.itemsPerPage = parseInt(response.data._pagination['items-per-page']);
+                            this.totalItems = parseInt(response.data._pagination['total-items']);
+                            this.pageCount = parseInt(response.data._pagination['total-page-count']);
+                            this.currentPage = parseInt(response.data._pagination['current-page']);
+                        }
                     }
                 })
                 .finally(() => this.isLoading = false);

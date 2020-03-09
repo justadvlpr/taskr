@@ -29,9 +29,17 @@ TODO
 # API
 
 ```
-GET  /api/task    ( list all the tasks )
-GET  /api/task?filter=today ( list todays tasks )
+POST /api/auth/login [ {"login": "", "password": ""} ]
+
+POST /api/auth/verify ( returns the current user data if token is validated )
+
+GET  /api/task                   ( list all the tasks )
+     /api/task?filter=today      ( list todays tasks )
+     /api/task?page=1&per-page=5 ( enables pagination when searching for tasks )
+
 GET  /api/task/1  ( view the task with the id 1 )
+
 POST /api/task    ( creates a new task )
+
 PUT  /api/task/1  ( updates the task with the id 1 )
 ```

@@ -8,7 +8,6 @@ use App\Controller;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Repository\TaskRepository;
-use Cycle\ORM\Command\Database\Delete;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Transaction;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -40,16 +39,31 @@ class TaskController extends Controller
             $userTasks = $taskRepository->getAll($user->getId());
         }
 
-        $currentPage = (int)$request->getQueryParams()['page'];
-        $pageSize = (int)$request->getQueryParams()['per-page'];
+        $pagination = null;
 
-        $paginator = (new OffsetPaginator($userTasks))
-            ->withPageSize($pageSize)
-            ->withCurrentPage($currentPage);
+        if (!empty($request->getQueryParams()['page'])) {
+            $currentPage = (int)$request->getQueryParams()['page'];
+            $pageSize = (int)$request->getQueryParams()['per-page'] ?? 5;
+
+            $userTasks = (new OffsetPaginator($userTasks))
+                ->withPageSize($pageSize)
+                ->withCurrentPage($currentPage);
+
+            if ($currentPage > $userTasks->getTotalPages()) {
+                return $this->renderJson(['success' => false, 'error' => 'Page not found'], 422);
+            }
+
+            $pagination = [
+                'items-per-page' => $pageSize,
+                'total-items' => $userTasks->getTotalItems(),
+                'total-page-count' => $userTasks->getTotalPages(),
+                'current-page' => $userTasks->getCurrentPage()
+            ];
+        }
 
         $tasks = [];
 
-        foreach ($paginator->read() as $task) {
+        foreach ($userTasks->read() as $task) {
             /** @var Task $task */
             $tasks[] = [
                 'id' => $task->getPk(),
@@ -63,12 +77,7 @@ class TaskController extends Controller
             [
                 'success' => true,
                 'tasks' => $tasks,
-                '_pagination' => [
-                    'items-per-page' => $pageSize,
-                    'total-items' => $paginator->getTotalItems(),
-                    'total-page-count' => $paginator->getTotalPages(),
-                    'current-page' => $paginator->getCurrentPage()
-                ]
+                '_pagination' => $pagination
             ],
             200
         );

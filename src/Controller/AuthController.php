@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Controller;
+use Cycle\ORM\ORMInterface;
+use Cycle\ORM\Transaction;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,7 +24,8 @@ class AuthController extends Controller
         WebView $view,
         User $user,
         LoggerInterface $logger
-    ) {
+    )
+    {
         $this->logger = $logger;
 
         parent::__construct($responseFactory, $user, $aliases, $view);
@@ -33,10 +36,47 @@ class AuthController extends Controller
         return 'auth';
     }
 
+    public function register(
+        ServerRequestInterface $request,
+        ORMInterface $orm
+    ): ResponseInterface
+    {
+        $body = $request->getParsedBody();
+        $error = null;
+
+        try {
+            foreach (['login', 'password'] as $name) {
+                if (empty($body[$name])) {
+                    throw new \InvalidArgumentException("{$name} is required.");
+                }
+            }
+
+            $user = new \App\Entity\User($body['login'], $body['password']);
+
+            $transaction = new Transaction($orm);
+            $transaction->persist($user);
+            $transaction->run();
+
+            return $this->renderJson(['success' => true], 200);
+        } catch (\Throwable $e) {
+            $this->logger->error($e);
+            $error = $e->getMessage();
+
+            return $this->renderJson(
+                [
+                    'success' => false,
+                    'error' => $error,
+                ],
+                422
+            );
+        }
+    }
+
     public function login(
         ServerRequestInterface $request,
         IdentityRepositoryInterface $identityRepository
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
         $body = $request->getParsedBody();
         $error = null;
 

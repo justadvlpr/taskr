@@ -29,6 +29,9 @@ class AppRouterFactory
                     Route::post('/login', [AuthController::class, 'login'])
                         ->name('auth/login'),
 
+                    Route::post('/register', [AuthController::class, 'register'])
+                        ->name('auth/register'),
+
                     Route::get('/verify', [AuthController::class, 'verify'])
                         ->name('auth/verify')
                         ->addMiddleware($auth)

@@ -20,70 +20,71 @@ const getters = {
 
 const actions = {
 
-    loginOrRegister({commit}: any, payload: any) {
-        commit('destroyAuthState');
-
-        let url = '';
-
-        switch (payload.type) {
-            case 'login':
-                url = 'auth/login';
-                break;
-
-            case 'register':
-                url = 'auth/register';
-                break;
-        }
-
-        let formData = new FormData();
-
-        for (let [key, value] of Object.entries(payload.formData)) {
-            formData.append(key, '' + value);
-        }
+    login({commit}: any, payload: any) {
+        const form = new FormData();
+        form.append('login', payload.login);
+        form.append('password', payload.password);
 
         return axios
-            .post(url, formData, {
+            .post('auth/login', form, {
                 timeout: 10000,
             })
             .then(response => {
+                if (
+                    response.data &&
+                    response.data.success
+                ) {
+                    commit('setAuthState', response.data);
 
-                if (!response.data) {
-                    throw 'Error, no response data!';
-                }
-
-                if (response.data.success === true) {
                     return response.data;
                 }
 
                 throw 'Error processing request!';
-
             })
             .catch((error) => {
-
-                if (!error.response.data) {
-                    throw 'Error, no response data!';
-                }
-
-                if (error.response.data.success === false) {
-
-                    if (error.response.data.errors) {
-
-                        let errors = "";
-
-                        Object.values(error.response.data.errors).forEach((value: any) => {
-                            Object.values(value).forEach((error: any) => {
-                                errors += "* " + error + "\n";
-                            });
-                        });
-
-                        throw errors;
-
-                    }
-
+                if (
+                    error.response &&
+                    error.response.data &&
+                    error.response.data.success === false &&
+                    error.response.data.error
+                ) {
+                    throw error.response.data.error;
                 }
 
                 throw 'Error processing request!';
+            });
+    },
 
+    register({commit}: any, payload: any) {
+        const form = new FormData();
+        form.append('login', payload.login);
+        form.append('password', payload.password);
+
+        return axios
+            .post('auth/register', form, {
+                timeout: 10000,
+            })
+            .then(response => {
+                if (
+                    response.data &&
+                    response.data.success
+                ) {
+                    return response.data;
+                }
+
+                throw 'Error processing request!';
+            })
+            .catch((error) => {
+                if (
+                    error.response &&
+                    error.response.data &&
+                    error.response.data.success === false &&
+                    error.response.data.error
+                ) {
+                    throw error.response.data.error;
+                }
+
+                throw 'Error processing request!';
             });
     },
 

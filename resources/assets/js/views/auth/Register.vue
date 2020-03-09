@@ -2,12 +2,12 @@
     <v-container>
         <v-card :loading="isProcessing" class="mx-auto my-12" elevation="0" max-width="400">
             <v-card-title class="justify-center">
-                Login into your account
+                Create an account
             </v-card-title>
 
             <v-card-text class="text-center">
-                No account yet?
-                <router-link to="/register">Register</router-link>
+                Already have an account?
+                <router-link to="/login">Login</router-link>
             </v-card-text>
 
             <v-card-text>
@@ -35,7 +35,7 @@
 
             <v-card-actions class="pa-4 pt-0">
                 <v-btn :disabled="!formValid || isProcessing" @click.prevent="submit" color="primary" text>
-                    Login
+                    Register
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -47,9 +47,9 @@
     import Component from "vue-class-component";
 
     @Component({
-        name: "LogIn",
+        name: "Register",
     })
-    export default class LogIn extends Vue {
+    export default class Register extends Vue {
 
         public formValid: boolean = true;
 
@@ -75,7 +75,7 @@
         submit() {
             this.isProcessing = true;
 
-            this.$store.dispatch('auth/login', this.formModel)
+            this.$store.dispatch('auth/register', this.formModel)
                 .then(() => {
                     this.$router.push('/tasks/today');
                 })

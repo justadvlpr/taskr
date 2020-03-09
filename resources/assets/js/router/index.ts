@@ -8,6 +8,7 @@ import PageNotFound from "@/views/PageNotFound.vue";
 import AppError from "@/components/AppError.vue";
 
 const LogIn = () => lazyLoadRoute(import(/* webpackChunkName */ '@/views/auth/LogIn.vue'));
+const Register = () => lazyLoadRoute(import(/* webpackChunkName */ '@/views/auth/Register.vue'));
 const TaskIndex = () => lazyLoadRoute(import(/* webpackChunkName */ '@/views/task/Index.vue'));
 const TaskCreate = () => lazyLoadRoute(import(/* webpackChunkName */ '@/views/task/Create.vue'));
 
@@ -39,6 +40,12 @@ const routes = [
                 path: '/login',
                 name: 'auth.login',
                 component: LogIn,
+                meta: {redirectIfAuthenticated: true},
+            },
+            {
+                path: '/register',
+                name: 'auth.register',
+                component: Register,
                 meta: {redirectIfAuthenticated: true},
             },
             {

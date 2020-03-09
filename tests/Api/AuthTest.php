@@ -28,7 +28,7 @@ class AuthTest extends TestCase
         $this->client = null;
     }
 
-    public function testRequiredLogin()
+    public function testRequiredLogin(): void
     {
         $response = $this->client->request(
             'POST',
@@ -39,7 +39,7 @@ class AuthTest extends TestCase
         $this->assertEquals('{"success":false,"error":"login is required."}', $response->getBody()->getContents());
     }
 
-    public function testLoginWrongCredentials()
+    public function testLoginWrongCredentials(): void
     {
         $response = $this->client->request(
             'POST',
@@ -56,7 +56,7 @@ class AuthTest extends TestCase
         $this->assertEquals('{"success":false,"error":"Invalid user or password."}', $response->getBody()->getContents());
     }
 
-    public function testLoginSuccess()
+    public function testLoginSuccess(): void
     {
         $token = $this->loginAndGetToken();
         $this->assertIsString($token);

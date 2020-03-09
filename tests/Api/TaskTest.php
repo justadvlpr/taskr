@@ -30,9 +30,11 @@ class TaskTest extends TestCase
         $this->client = null;
     }
 
-    public function testCreateTaskRequired()
+    public function testCreateTaskRequired(): void
     {
-        $response = $this->client->request('POST', 'task',
+        $response = $this->client->request(
+            'POST',
+            'task',
             [
                 'http_errors' => false,
                 'form_params' => [
@@ -47,9 +49,11 @@ class TaskTest extends TestCase
         $this->assertEquals(422, $response->getStatusCode());
     }
 
-    public function testCreateAndUpdateTaskWithSuccess()
+    public function testCreateAndUpdateTaskWithSuccess(): void
     {
-        $response = $this->client->request('POST', 'task',
+        $response = $this->client->request(
+            'POST',
+            'task',
             [
                 'http_errors' => false,
                 'form_params' => [
@@ -74,7 +78,7 @@ class TaskTest extends TestCase
             'PUT',
             'task/' . $taskId,
             [
-                'body' => json_encode(['task' => 'test 2',]),
+                'body' => json_encode(['task' => 'test 2', ]),
                 'http_errors' => false,
                 'headers' => [
                     'Authorization' => 'Bearer ' . static::$token,

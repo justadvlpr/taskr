@@ -64,7 +64,7 @@
         "post-autoload-dump": [
             "@php -r \"file_exists('.env') || copy('.env.dist', '.env');\""
         ],
-        "ecs": "./vendor/bin/ecs check src/ --config ecs.yml --fix",
+        "ecs": "./vendor/bin/ecs check src/ tests/ config/ --config ecs.yml --fix",
         "test": "./vendor/bin/phpunit"
     },
     "extra": {

@@ -7,10 +7,10 @@ use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Yiisoft\Cache\ArrayCache;
 use Yiisoft\Cache\Cache;
+use Yiisoft\Cache\CacheInterface as YiiCacheInterface;
 use Yiisoft\Log\Target\File\FileRotator;
 use Yiisoft\Log\Target\File\FileRotatorInterface;
 use Yiisoft\Mailer\MailerInterface;
-use Yiisoft\Cache\CacheInterface as YiiCacheInterface;
 
 /**
  * @var array $params

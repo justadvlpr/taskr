@@ -3,8 +3,8 @@
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
+use Yiisoft\EventDispatcher\Provider\Provider;
 
 /**
  * @var array $params

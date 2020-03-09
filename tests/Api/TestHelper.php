@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 
 trait TestHelper
 {
-    protected static function resetDbAndCreateUser()
+    protected static function resetDbAndCreateUser(): void
     {
         $path = dirname(__DIR__, 2);
         @unlink("{$path}/runtime/database.db");

@@ -171,7 +171,9 @@ class TaskController extends Controller
         try {
             $task = $this->findTask($request, $orm);
 
-            $orm->queueDelete($task)->execute();
+            $tr = new Transaction($orm);
+            $tr->delete($task);
+            $tr->run();
 
             return $this->renderJson([], 204);
         } catch (\Throwable $e) {

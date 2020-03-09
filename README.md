@@ -15,6 +15,7 @@ This is a single page application, technologies used:
 
 ```
 $: git clone https://github.com/justadvlpr/taskr.git
+$: cp .env.dist .env
 $: docker-compose up -d
 $: docker-compose exec --user taskr app composer install
 $: docker-compose exec --user taskr app npm run dev

@@ -37,7 +37,7 @@ File **Factory/AppRouterFactory.php** to see which routes implement the auth mid
 POST /api/auth/login [ {"login": "", "password": ""} ]
 POST /api/auth/register [ {"login": "", "password": ""} ]
 
-POST /api/auth/verify ( returns the current user data if token is validated )
+GET /api/auth/verify ( returns the current user data )
 
 GET  /api/task                   ( list all the tasks )
      /api/task?filter=today      ( list todays tasks )

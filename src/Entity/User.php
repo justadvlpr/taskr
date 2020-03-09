@@ -12,7 +12,10 @@ use Yiisoft\Security\PasswordHasher;
 use Yiisoft\Security\Random;
 
 /**
- * @Cycle\Annotated\Annotation\Entity(repository="App\Repository\UserRepository", mapper="Yiisoft\Yii\Cycle\Mapper\TimestampedMapper")
+ * @Cycle\Annotated\Annotation\Entity(
+ *     repository="App\Repository\UserRepository",
+ *     mapper="Yiisoft\Yii\Cycle\Mapper\TimestampedMapper"
+ * )
  * @Cycle\Annotated\Annotation\Table(
  *     indexes={
  *         @Cycle\Annotated\Annotation\Table\Index(columns={"login"}, unique=true),
@@ -53,7 +56,10 @@ class User implements IdentityInterface
     private DateTimeImmutable $updated_at;
 
     /**
-     * @Cycle\Annotated\Annotation\Relation\HasMany(target="App\Entity\Task", fkAction="CASCADE")
+     * @Cycle\Annotated\Annotation\Relation\HasMany(
+     *     target="App\Entity\Task",
+     *     fkAction="CASCADE"
+     * )
      * @var Task[] | CollectionPromise
      */
     private $tasks;
